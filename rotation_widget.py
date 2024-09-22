@@ -10,6 +10,9 @@ from PyQt5.QtCore import Qt, QPointF
 
 class RotationWidget(QWidget):
 
+    #По часовой
+    is_clockwise = True
+
     @override
     def __init__(self):
         super().__init__()
@@ -23,6 +26,11 @@ class RotationWidget(QWidget):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
 
+        self.polygon = [QPointF(self.rotation_point.x(), self.rotation_point.y()),
+                        QPointF(self.rotation_point.x() + 50, self.rotation_point.y()),
+                        QPointF(self.rotation_point.x() + 25,
+                                self.rotation_point.y() + 50)]  # Пример многоугольника (треугольник)
+
         # Рисуем исходный многоугольник
         painter.setPen(QPen(Qt.blue, 2))
         painter.drawPolygon(*self.polygon)
@@ -34,6 +42,7 @@ class RotationWidget(QWidget):
         # Рисуем повернутый многоугольник
         painter.setPen(QPen(Qt.green, 2))
         rotated_polygon = self.rotate_polygon()
+
         painter.drawPolygon(*rotated_polygon)
 
     def init_ui(self):
@@ -41,7 +50,10 @@ class RotationWidget(QWidget):
 
     def rotate_point(self, point, angle, center):
         #Функция для поворота точки относительно центра на заданный угол
-        rad = math.radians(angle)
+        if self.is_clockwise:
+            rad = math.radians(angle)
+        else:
+            rad = math.radians(-1 * angle)
         coord = np.array([[point.x() - center.x(), point.y() - center.y()]])
         rotation_matrix = np.array([[math.cos(rad), math.sin(rad)], [-math.sin(rad), math.cos(rad)]])
         result = np.dot(coord, rotation_matrix)

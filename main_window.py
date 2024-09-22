@@ -19,6 +19,7 @@ class MainWindow(QMainWindow):
 
             self.rotation_widget.rotation_point = QPointF(x, y)
             self.rotation_widget.angle = angle
+            self.rotation_widget.is_clockwise = not self.ccw_checkbox.isChecked()
             self.rotation_widget.update()  # Перерисовываем виджет
         except ValueError:
             pass  # Игнорируем некорректный ввод
@@ -31,8 +32,13 @@ class MainWindow(QMainWindow):
 
         # Поля для ввода координат точки вращения
         self.x_input = QLineEdit(self)
+        self.x_input.setText('100')
+
         self.y_input = QLineEdit(self)
+        self.y_input.setText('100')
+
         self.angle_input = QLineEdit(self)
+        self.angle_input.setText('0')
 
         self.x_input.setPlaceholderText("OX")
         self.y_input.setPlaceholderText("OY")
