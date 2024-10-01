@@ -2,34 +2,13 @@ from PyQt5.QtWidgets import QCheckBox, QMainWindow, QWidget, QVBoxLayout, QLabel
 
 from rotation_widget import RotationWidget
 
-from PyQt5.QtCore import Qt, QPointF
+from PyQt5.QtCore import QPointF
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.init_ui()
-
-    def apply_rotation(self):
-        #Применяем изменения при нажатии кнопки
-        try:
-            #Считываем координаты
-            x = float(self.x_input.text())
-            y = float(self.y_input.text())
-            #Считываем угол
-            angle = float(self.angle_input.text())
-            #Инициализируем точку вращения
-            self.rotation_widget.rotation_point = QPointF(x, y)
-            #Считываем настройку вращения - по часовой или против
-            self.rotation_widget.is_clockwise = not self.ccw_checkbox.isChecked()
-            #Высчитываем конечный угол поворота
-            if self.rotation_widget.is_clockwise:
-                self.rotation_widget.angle += angle
-            else:
-                self.rotation_widget.angle -= angle
-            self.rotation_widget.update()  # Перерисовываем виджет
-        except ValueError:
-            self.error.setText('Ошибка, некорректный ввод')
 
     def init_ui(self):
         self.setWindowTitle('Поворот плоского объекта. Будило Зашляхтин Костенко.')
@@ -84,3 +63,24 @@ class MainWindow(QMainWindow):
         container = QWidget()
         container.setLayout(layout)
         self.setCentralWidget(container)
+
+    def apply_rotation(self):
+        #Применяем изменения при нажатии кнопки
+        try:
+            #Считываем координаты
+            x = float(self.x_input.text())
+            y = float(self.y_input.text())
+            #Считываем угол
+            angle = float(self.angle_input.text())
+            #Инициализируем точку вращения
+            self.rotation_widget.rotation_point = QPointF(x, y)
+            #Считываем настройку вращения - по часовой или против
+            self.rotation_widget.is_clockwise = not self.ccw_checkbox.isChecked()
+            #Высчитываем конечный угол поворота
+            if self.rotation_widget.is_clockwise:
+                self.rotation_widget.angle += angle
+            else:
+                self.rotation_widget.angle -= angle
+            self.rotation_widget.update()  # Перерисовываем виджет
+        except ValueError:
+            self.error.setText('Ошибка, некорректный ввод')
